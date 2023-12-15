@@ -7,7 +7,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const { sessionMiddleware } = require("./src/middlewares/session");
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
