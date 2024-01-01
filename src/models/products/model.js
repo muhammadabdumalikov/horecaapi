@@ -64,27 +64,6 @@ insert into products (company_id, category_id, uz_name, ru_name, en_name, measur
 values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) returning id
 `;
 
-module.exports.UPDATE = `
-update products
-set
-	company_id = $1,
-	category_id = $2,
-	uz_name = $3,
-	ru_name = $4,
-	en_name = $5,
-	measure = $6,
-	barcode = $7,
-	image = $8,
-	blokda_soni = $9,
-	description = $10,
-	dona_price = $11,
-	blok_price = $12,
-	disc_price = $13,
-	updated_at = now()
-where id = $14
-returning id	
-`;
-
 module.exports.INACTIVE = `
 update products
 set

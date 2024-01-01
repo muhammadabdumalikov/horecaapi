@@ -138,23 +138,7 @@ module.exports.updateMid = async (req, res, next) => {
 		  ruName,
       enName,
       id } = req?.body;
-		if (!uzName ||
-      !ruName ||
-      !enName ||
-      !companyId ||
-		  !categoryId ||
-		  !barcode ||
-		  !image ||
-		  !countInBlock ||
-		  !description ||
-      !countPrice ||
-      !id) {
-			res.status(449).json({
-				error: true,
-				message: "Qatorlar to'ldirilganini tekshiring",
-			});
-			return;
-		} else if (newLine([uzName, ruName, enName])) {
+		 if (newLine([uzName, ruName, enName])) {
 			res.status(449).json({
 				error: true,
 				message: "Yangi qatorlar bilan kiritish cheklangan",
@@ -187,16 +171,16 @@ module.exports.updateMid = async (req, res, next) => {
 			return;
 		} else {
 			req.body = {
-				uzName: uzName.trim(),
-				ruName: ruName.trim(),
-        enName: enName.trim(),
+				uzName: uzName?.trim(),
+				ruName: ruName?.trim(),
+        enName: enName?.trim(),
         companyId,
 		    categoryId,
 		    measure,
-		    barcode: barcode.trim(),
-		    image: image.trim(),
+		    barcode: barcode?.trim(),
+		    image: image?.trim(),
 		    countInBlock,
-		    description: description.trim(),
+		    description: description?.trim(),
 		    countPrice,
 		    blockPrice: blockPrice,
 		    discountPrice: discountPrice,

@@ -1,5 +1,6 @@
 const { ProductUnit } = require("../enums/index.enum");
 const ProductModel = require("../models/products");
+const { BodyToDbMapper, ProductBodyToDb } = require("../support/mappers")
 
 module.exports.all = async (req, res) => {
 	try {
@@ -95,39 +96,8 @@ module.exports.add = async (req, res) => {
 
 module.exports.upd = async (req, res) => {
 	try {
-    const {
-      companyId,
-		  categoryId,
-		  measure,
-		  barcode,
-		  image,
-		  countInBlock,
-		  description,
-		  countPrice,
-		  blockPrice,
-		  discountPrice,
-		  uzName,
-		  ruName,
-		  enName,
-      id
-    } = req?.body;
-    const data = await ProductModel.update(
-      companyId,
-		  categoryId,
-		  measure,
-		  barcode,
-		  image,
-		  countInBlock,
-		  description,
-		  countPrice,
-		  blockPrice,
-		  discountPrice,
-		  uzName,
-		  ruName,
-		  enName,
-      id
-    );
-
+		const data = await BodyToDbMapper({ body: req.body, mapper: ProductBodyToDb, action: 'UPDATE' }, 'products');
+		
 		if (!data) {
 			res.status(401).json({
 				error: true,
