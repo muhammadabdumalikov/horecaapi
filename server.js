@@ -32,11 +32,13 @@ const authRoutes = require("./src/routes/auth");
 const categoryRoutes = require("./src/routes/categories");
 const companyRoutes = require("./src/routes/companies");
 const agentRoutes = require("./src/routes/agents");
+const productRoutes = require("./src/routes/products");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/agent", agentRoutes);
+app.use("/api/product", productRoutes);
 
 // Not Found Route
 
