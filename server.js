@@ -5,6 +5,8 @@ const http = require("http");
 const server = http.createServer(app);
 const cors = require("cors");
 const helmet = require("helmet");
+const fileUpload = require("express-fileupload");
+
 const { sessionMiddleware } = require("./src/middlewares/session");
 
 const PORT = process.env.PORT || 3000;
@@ -16,6 +18,8 @@ app.set("trust proxy", 1);
 app.use(sessionMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("views"));
+app.use(fileUpload());
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) {
 		res.status(409).json({
@@ -33,12 +37,14 @@ const categoryRoutes = require("./src/routes/categories");
 const companyRoutes = require("./src/routes/companies");
 const agentRoutes = require("./src/routes/agents");
 const productRoutes = require("./src/routes/products");
+const notificationRoutes = require("./src/routes/notification");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/agent", agentRoutes);
 app.use("/api/product", productRoutes);
+app.use("/api/ntf", notificationRoutes);
 
 // Not Found Route
 
