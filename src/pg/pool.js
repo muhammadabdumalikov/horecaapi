@@ -33,3 +33,15 @@ module.exports.fetchOne = async (SQL, ...params) => {
 		await client.release();
 	}
 };
+
+module.exports.oneTimeClient = async (SQL, ...params) => {
+	const client = await pool.connect();
+	try {
+		let { rows } = await client.query(SQL, params ? params : null);
+		return rows;
+	} catch (e) {
+		return e;
+	} finally {
+		await client.release();
+	}
+};
