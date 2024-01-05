@@ -1,10 +1,14 @@
-const AgentModel = require("../models/agents");
+const { ProductUnit, OrderStatus, PaymentTypes } = require("../enums/index.enum");
+const OrderModel = require("../models/orders");
+const { clientTransaction } = require("../pg/pool");
+const { BodyToDbMapper, ProductBodyToDb, OrderBodyToDb, OrderItemsBodyToDb } = require("../support/mappers");
+const ProductModel = require("../models/products");
+
 
 module.exports.all = async (req, res) => {
 	try {
-		const { search, page } = req?.body;
-		const data = await AgentModel.all(search, page);
-
+		const { page } = req?.body;
+		const data = await OrderModel.all(page);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -34,26 +38,62 @@ module.exports.all = async (req, res) => {
 };
 
 module.exports.add = async (req, res) => {
-	try {
-		const { districtId, fullname, contact, username, password } = req?.body;
+  try {
+    const { paymentType, items } = req?.body;
 
-		const data = await AgentModel.create(
-			districtId,
-			fullname,
-			contact,
-			username,
-			password
-		);
+		let data;
+		await clientTransaction(async (trx) => {
+      const order = await BodyToDbMapper({
+        body: {
+          userId: req.user?.id || 1,
+          status: OrderStatus.accepted,
+          paymentType: paymentType,
+        }, mapper: OrderBodyToDb, action: 'CREATE'
+			}, 'orders', trx);
+			const product = await ProductModel.getOneTransaction(items[0].productId, trx);
+
+      const orderItems = [];
+
+			for (const item of items) {
+				orderItems.push(BodyToDbMapper({
+					body: {
+          	orderId: order[0].id,
+          	productId: item.productId,
+          	quantity: item.quantity,
+          	unitType: item.orderType,
+          	unitPrice: +product.dona_price * +item.quantity
+        	}, action: 'CREATE', mapper: OrderItemsBodyToDb }, 'order_items', trx)
+        )
+			}
+
+			const orderItemResult = await Promise.all(orderItems);
+
+			const totalSumOfOrder = orderItemResult.reduce((a, curr) => a + Number(curr[0].unit_price), 0);
+
+			const orderUpdate = await BodyToDbMapper({
+        body: {
+          quantity: orderItemResult.length,
+					totalSum: totalSumOfOrder,
+					id: order[0].id
+        }, mapper: OrderBodyToDb, action: 'UPDATE'
+			}, 'orders', trx);
+
+			if (!orderUpdate[0]) throw new Error();
+			
+			data = orderUpdate[0];
+			return orderUpdate;
+		})
+			.then((result) => {
+    })
+    .catch((error) => {
+			console.error('Transaction failed:', error);
+			throw new Error();
+		});
+		
 		if (!data) {
 			res.status(401).json({
 				error: true,
 				message: `Ma'lumotlar topilmadi`,
-			});
-			return;
-		} else if (data?.constraint === "agents_district_id_fkey") {
-			res.status(449).json({
-				error: true,
-				message: `Hudud uchun noto'g'ri ID kiritildi`,
 			});
 			return;
 		} else if (data?.severity) {
@@ -81,18 +121,8 @@ module.exports.add = async (req, res) => {
 
 module.exports.upd = async (req, res) => {
 	try {
-		const { districtId, fullname, contact, username, password, id } =
-			req?.body;
-
-		const data = await AgentModel.update(
-			districtId,
-			fullname,
-			contact,
-			username,
-			password,
-			id
-		);
-
+		const data = await BodyToDbMapper({ body: req.body, mapper: ProductBodyToDb, action: 'UPDATE' }, 'products');
+		
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -126,7 +156,7 @@ module.exports.inActive = async (req, res) => {
 	try {
 		const { id } = req?.body;
 
-		const data = await AgentModel.inActive(id);
+		const data = await OrderModel.inActive(id);
 
 		if (!data) {
 			res.status(401).json({

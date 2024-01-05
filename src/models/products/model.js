@@ -76,3 +76,8 @@ set
 	where id = $1
 returning id, in_active
 `;
+
+module.exports.GET_ONE = `
+select * from products
+	where id = $1 limit 1
+`;

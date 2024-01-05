@@ -1,4 +1,4 @@
-const { newLine } = require("../support/types");
+const { newLine, isNumber } = require("../support/types");
 const minLength = 3;
 const maxLength = 128;
 const barcodeMaxLength = 24;
@@ -39,79 +39,27 @@ module.exports.getAllMid = async (req, res, next) => {
 };
 
 module.exports.createMid = async (req, res, next) => {
-	try {
-		const { companyId,
-		  categoryId,
-		  measure,
-		  barcode,
-		  image,
-		  countInBlock,
-		  description,
-		  countPrice,
-		  blockPrice,
-		  discountPrice,
-		  uzName,
-		  ruName,
-      enName
-    } = req?.body;
-    if (!uzName ||
-      !ruName ||
-      !enName ||
-      !companyId ||
-		  !categoryId ||
-		  !barcode ||
-		  !image ||
-		  !countInBlock ||
-		  !description ||
-			!countPrice) {
+  try {
+    const { paymentType, items } = req?.body;
+    if (!paymentType || items?.length < 1) {
 			res.status(449).json({
 				error: true,
 				message: "Qatorlar to'ldirilganini tekshiring",
 			});
 			return;
-		} else if (newLine([uzName, ruName, enName])) {
-			res.status(449).json({
-				error: true,
-				message: "Yangi qatorlar bilan kiritish cheklangan",
-			});
-			return;
-		} else if (
-			uzName?.length < minLength ||
-			ruName?.length < minLength ||
-			enName?.length < minLength ||
-      barcode?.length < minLength ||
-      description?.length < minLength ||
-			image?.length < minLength ||
-			uzName?.length > maxLength ||
-			ruName?.length > maxLength ||
-      enName?.length > maxLength ||
-      barcode?.length > barcodeMaxLength ||
-      description?.length > descriptionMaxLength ||
-      image?.length > imageMaxlength
-		) {
-			res.status(449).json({
-				error: true,
-				message: `${maxLength} belgidan kam kiritish cheklangan yoki belgilangan limitdan ko'p belgi kiritilgan`,
-			});
-			return;
-		} else {
-			req.body = {
-				uzName: uzName.trim(),
-				ruName: ruName.trim(),
-        enName: enName.trim(),
-        companyId,
-		    categoryId,
-		    measure,
-		    barcode: barcode.trim(),
-		    image: image.trim(),
-		    countInBlock,
-		    description: description.trim(),
-		    countPrice,
-		    blockPrice: blockPrice,
-		    discountPrice: discountPrice,
-			};
-			return await next();
-		}
+    }
+
+    const itemRestricted = items.find(item => !isNumber(item?.quantity) || !isNumber(item?.productId) || !isNumber(item?.orderType))
+  
+    if (itemRestricted) {
+      res.status(449).json({
+			  error: true,
+			  message: "Qatorlar to'ldirilganini tekshiring",
+      });
+      return;
+    }
+
+		return await next();
 	} catch (e) {
 		res.status(500).json({
 			error: true,

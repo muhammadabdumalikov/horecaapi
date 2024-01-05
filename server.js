@@ -38,6 +38,7 @@ const companyRoutes = require("./src/routes/companies");
 const agentRoutes = require("./src/routes/agents");
 const productRoutes = require("./src/routes/products");
 const notificationRoutes = require("./src/routes/notification");
+const orderRoutes = require("./src/routes/orders");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
@@ -45,6 +46,7 @@ app.use("/api/company", companyRoutes);
 app.use("/api/agent", agentRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/ntf", notificationRoutes);
+app.use("/api/order", orderRoutes);
 
 // Not Found Route
 
