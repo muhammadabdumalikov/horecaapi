@@ -33,6 +33,7 @@ app.use(function (error, req, res, next) {
 
 //ROUTES
 const authRoutes = require("./src/routes/auth");
+const authURoutes = require("./src/routes/users");
 const categoryRoutes = require("./src/routes/categories");
 const companyRoutes = require("./src/routes/companies");
 const agentRoutes = require("./src/routes/agents");
@@ -41,6 +42,7 @@ const notificationRoutes = require("./src/routes/notification");
 const orderRoutes = require("./src/routes/orders");
 
 app.use("/api/auth", authRoutes);
+app.use("/api/auth-u", authURoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/agent", agentRoutes);
