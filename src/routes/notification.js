@@ -10,7 +10,7 @@ const {
 } = require("../middlewares/notification");
 const { verify } = require("../jwt");
 
-router.get("/", verify, getAllMid, Notifications.all);
+router.get("/", getAllMid, Notifications.all);
 router.post("/create", verify, createMid, Notifications.add);
 router.put("/update", verify, updateMid, Notifications.upd);
 router.put("/in-active", verify, updateInAcMid, Notifications.inActive);

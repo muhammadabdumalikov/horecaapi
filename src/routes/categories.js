@@ -9,7 +9,7 @@ const {
 } = require("../middlewares/categories");
 const { verify } = require("../jwt");
 
-router.get("/", verify, getAllMid, CategoryController.all);
+router.get("/", getAllMid, CategoryController.all);
 router.post("/create", verify, createMid, CategoryController.add);
 router.put("/update", verify, updateMid, CategoryController.upd);
 router.put("/in-active", verify, updateInAcMid, CategoryController.inActive);

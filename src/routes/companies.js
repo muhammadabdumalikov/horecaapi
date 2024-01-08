@@ -9,7 +9,7 @@ const {
 } = require("../middlewares/companies");
 const { verify } = require("../jwt");
 
-router.get("/", verify, getAllMid, Companies.all);
+router.get("/", getAllMid, Companies.all);
 router.post("/create", verify, createMid, Companies.add);
 router.put("/update", verify, updateMid, Companies.upd);
 router.put("/in-active", verify, updateInAcMid, Companies.inActive);
