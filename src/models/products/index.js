@@ -36,7 +36,7 @@ module.exports.create = async (
 		description,
 		countPrice,
 		blockPrice,
-		discountPrice,
+		discountPrice
 	);
 };
 
