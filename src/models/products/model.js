@@ -60,8 +60,8 @@ from a;
 `;
 
 module.exports.CREATE = `
-insert into products (company_id, category_id, uz_name, ru_name, en_name, measure, barcode, image, blokda_soni, description, dona_price, blok_price, disc_price)
-values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) returning id
+insert into products (company_id, category_id, uz_name, ru_name, en_name, measure, barcode, image, blok_soni, blokda_soni, description, dona_price, blok_price, disc_price)
+values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning id
 `;
 
 module.exports.INACTIVE = `

@@ -47,7 +47,8 @@ module.exports.createMid = async (req, res, next) => {
 		  image,
 		  countInBlock,
 		  description,
-		  countPrice,
+			countPrice,
+			blockCount,
 		  blockPrice,
 		  discountPrice,
 		  uzName,
@@ -59,7 +60,8 @@ module.exports.createMid = async (req, res, next) => {
       !enName ||
       !companyId ||
 		  !categoryId ||
-		  !barcode ||
+			!barcode ||
+			!blockCount ||
 		  !image ||
 		  !countInBlock ||
 		  !description ||
@@ -102,10 +104,11 @@ module.exports.createMid = async (req, res, next) => {
         companyId,
 		    categoryId,
 		    measure,
-		    barcode: barcode.trim(),
-		    image: image.trim(),
+		    barcode: barcode?.trim(),
+				image: image.trim(),
+				blockCount,
 		    countInBlock,
-		    description: description.trim(),
+		    description: description?.trim(),
 		    countPrice,
 		    blockPrice: blockPrice,
 		    discountPrice: discountPrice,
