@@ -7,6 +7,9 @@ with counts as (
 			when $1::text <> '%""%' then $1
 			else concat(p.uz_name, p.ru_name, p.en_name)
 		end
+		and p.in_active = case when $4::bool is not null then $4 else p.in_active end
+		and p.company_id = case when $5::int is not null then $5 else p.company_id end
+		and p.category_id = case when $6::int is not null then $6 else p.category_id end
 ), a as (
 	select
 	array (
@@ -42,20 +45,23 @@ with counts as (
 				when $1::text <> '%""%'::text then $1
 				else concat(p.uz_name, p.ru_name, p.en_name)
 			end
+			and p.in_active = case when $4::bool is not null then $4 else p.in_active end
+			and p.company_id = case when $5::int is not null then $5 else p.company_id end
+			and p.category_id = case when $6::int is not null then $6 else p.category_id end
 			order by p.id
-			limit 40 offset $2
+			limit $3 offset $2
 	) list,
 	jsonb_build_object(
 		'count', p.count,
 		'pages', case
 					when p.count = 0 then 0
-					when p.count < 41 then 1
-					when (mod(p.count, 40)) >= 1 then ((p.count / 40) + 1)
-					else (p.count / 40)
+					when p.count < ($3 + 1) then 1
+					when (mod(p.count, $3)) >= 1 then ((p.count / $3) + 1)
+					else (p.count / $3)
 				end,
 		'page', case
 					when p.count = 0 then 0
-					else $2 / 40 + 1
+					else $2 / $3 + 1
 				end 
 	) more_info
 from counts p

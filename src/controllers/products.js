@@ -4,8 +4,8 @@ const { BodyToDbMapper, ProductBodyToDb } = require("../support/mappers")
 
 module.exports.all = async (req, res) => {
 	try {
-		const { search, page } = req?.body;
-		const data = await ProductModel.all(search, page);
+		const body = req?.body;
+		const data = await ProductModel.all(body);
 		if (!data) {
 			res.status(401).json({
 				error: true,

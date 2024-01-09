@@ -7,7 +7,7 @@ const descriptionMaxLength = 512;
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { page, search } = req?.query;
+		const { search, page, companyId, categoryId, active, limit } = req?.body;
 		const offset = page ? (page - 1) * 2 : 0;
 
 		if (newLine([search])) {
@@ -26,6 +26,10 @@ module.exports.getAllMid = async (req, res, next) => {
 			req.body = {
 				page: offset,
 				search: search ? search.trim() : "",
+				categoryId,
+				companyId,
+				active,
+				limit
 			};
 			return await next();
 		}
