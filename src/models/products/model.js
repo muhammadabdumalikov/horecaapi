@@ -18,7 +18,12 @@ with counts as (
 					'ru_name', p.ru_name,
 					'en_name', p.en_name,
 					'company_id', p.company_id,
-					'categpry_id', p.category_id,
+					'category', jsonb_build_object(
+						'id', p.category_id,
+						'uz_name', c.uz_name,
+						'ru_name', c.ru_name,
+						'en_name', c.en_name
+					),
 					'image', p.image,
 					'barcode', p.barcode,
 					'description', p.description,
@@ -31,6 +36,7 @@ with counts as (
 					'updated_at', to_char(p.updated_at, 'hh24:mi / dd.mm.yy')
 				)
 		from products p
+		join categories as c on c.id = p.category_id 
 			where concat(p.uz_name, p.ru_name, p.en_name) ilike
 			case
 				when $1::text <> '%""%'::text then $1
