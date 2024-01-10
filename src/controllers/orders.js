@@ -54,14 +54,18 @@ module.exports.add = async (req, res) => {
 
 			const orderItems = [];
 			for (const item of items) {
+				let priceForItem = product.disc_price ? product.disc_price : product.dona_price;
+
+				if (item.quantity >= product.blokda_soni && +product.blok_price < priceForItem) {
+					priceForItem = +product.blok_price;
+				}
+
 				orderItems.push(BodyToDbMapper({
 					body: {
           	orderId: order[0]?.id,
           	productId: item.productId,
           	quantity: item.quantity,
-						unitPrice: item.quantity >= product.blokda_soni
-							? +product.blok_price * +item.quantity
-							: +product.dona_price * +item.quantity
+						unitPrice: priceForItem,
         	}, action: 'CREATE', mapper: OrderItemsBodyToDb }, 'order_items', trx)
         )
 			}
