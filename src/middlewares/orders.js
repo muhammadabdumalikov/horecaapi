@@ -49,7 +49,7 @@ module.exports.createMid = async (req, res, next) => {
 			return;
     }
 
-    const itemRestricted = items.find(item => !isNumber(item?.quantity) || !isNumber(item?.productId) || !isNumber(item?.orderType))
+    const itemRestricted = items.find(item => !isNumber(item?.quantity) || !isNumber(item?.productId))
   
     if (itemRestricted) {
       res.status(449).json({
