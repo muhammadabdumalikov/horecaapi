@@ -42,7 +42,6 @@ module.exports.add = async (req, res) => {
     const { paymentType, items } = req?.body;
 
 		let data;
-		console.log(req.body);
 		await clientTransaction(async (trx) => {
       const order = await BodyToDbMapper({
         body: {
@@ -52,7 +51,7 @@ module.exports.add = async (req, res) => {
         }, mapper: OrderBodyToDb, action: 'CREATE'
 			}, 'orders', trx);
 			const product = await ProductModel.getOneTransaction(items[0].productId, trx);
-
+			console.log(1111111, product);
       const orderItems = [];
 			for (const item of items) {
 				orderItems.push(BodyToDbMapper({
@@ -81,7 +80,8 @@ module.exports.add = async (req, res) => {
 			}, 'orders', trx);
 
 			if (!orderUpdate[0]) throw new Error();
-			console.log(orderUpdate);
+
+			console.log(222222, orderUpdate);
 			data = orderUpdate[0];
 			return orderUpdate;
 		})
