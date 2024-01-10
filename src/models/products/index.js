@@ -16,7 +16,6 @@ module.exports.all = async ({search, page = 1, limit = 40, active = true, compan
 module.exports.create = async (
 	companyId,
 	categoryId,
-	measure,
 	barcode,
 	image,
 	countInBlock,
@@ -36,7 +35,6 @@ module.exports.create = async (
 		uzName,
 		ruName,
 		enName,
-		measure,
 		barcode,
 		image,
 		blockCount,
@@ -51,7 +49,6 @@ module.exports.create = async (
 module.exports.update = async (
 	companyId,
 	categoryId,
-	measure,
 	barcode,
 	image,
 	countInBlock,
@@ -71,7 +68,6 @@ module.exports.update = async (
 		uzName,
 		ruName,
 		enName,
-		measure,
 		barcode,
 		image,
 		countInBlock,

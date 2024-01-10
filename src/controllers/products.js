@@ -46,7 +46,6 @@ module.exports.add = async (req, res) => {
     const {
       companyId,
 		  categoryId,
-		  measure = req?.body?.measure ? measure : ProductUnit.piece,
 		  barcode,
 		  image,
 		  countInBlock,
@@ -61,7 +60,6 @@ module.exports.add = async (req, res) => {
     } = req?.body;
 		const data = await ProductModel.create(companyId,
 		categoryId,
-		measure,
 		barcode,
 		image,
 		countInBlock,

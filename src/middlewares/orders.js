@@ -73,7 +73,6 @@ module.exports.updateMid = async (req, res, next) => {
 	try {
 		const { companyId,
 		  categoryId,
-		  measure,
 		  barcode,
 		  image,
 		  countInBlock,
@@ -123,7 +122,6 @@ module.exports.updateMid = async (req, res, next) => {
         enName: enName?.trim(),
         companyId,
 		    categoryId,
-		    measure,
 		    barcode: barcode?.trim(),
 		    image: image?.trim(),
 		    countInBlock,

@@ -6,7 +6,6 @@ const ProductBodyToDb = {
   enName: 'en_name',
   companyId: 'company_id',
 	categoryId: 'category_id',
-	measure: 'measure',
 	barcode: 'barcode',
   image: 'image',
   blockCount: 'blok_soni',
@@ -30,7 +29,6 @@ const OrderItemsBodyToDb = {
   orderId: 'order_id',
   productId: 'product_id',
   quantity: 'quantity',
-  unitType: 'unit_type',
   unitPrice: 'unit_price',
 }
 

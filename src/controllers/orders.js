@@ -59,7 +59,6 @@ module.exports.add = async (req, res) => {
           	orderId: order[0]?.id,
           	productId: item.productId,
           	quantity: item.quantity,
-          	unitType: product.measure,
 						unitPrice: item.quantity >= product.blokda_soni
 							? +product.blok_price * +item.quantity
 							: +product.dona_price * +item.quantity
