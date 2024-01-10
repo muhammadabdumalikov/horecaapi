@@ -51,12 +51,12 @@ module.exports.add = async (req, res) => {
         }, mapper: OrderBodyToDb, action: 'CREATE'
 			}, 'orders', trx);
 			const product = await ProductModel.getOneTransaction(items[0].productId, trx);
-			console.log(1111111, product);
+			console.log(1111111, order);
       const orderItems = [];
 			for (const item of items) {
 				orderItems.push(BodyToDbMapper({
 					body: {
-          	orderId: order[0].id,
+          	orderId: order[0]?.id,
           	productId: item.productId,
           	quantity: item.quantity,
           	unitType: product.measure,
