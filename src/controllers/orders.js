@@ -51,8 +51,8 @@ module.exports.add = async (req, res) => {
         }, mapper: OrderBodyToDb, action: 'CREATE'
 			}, 'orders', trx);
 			const product = await ProductModel.getOneTransaction(items[0].productId, trx);
-			console.log(1111111, order);
-      const orderItems = [];
+
+			const orderItems = [];
 			for (const item of items) {
 				orderItems.push(BodyToDbMapper({
 					body: {
@@ -81,7 +81,6 @@ module.exports.add = async (req, res) => {
 
 			if (!orderUpdate[0]) throw new Error();
 
-			console.log(222222, orderUpdate);
 			data = orderUpdate[0];
 			return orderUpdate;
 		})
