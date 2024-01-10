@@ -53,7 +53,7 @@ module.exports.add = async (req, res) => {
 			const product = await ProductModel.getOneTransaction(items[0].productId, trx);
 
       const orderItems = [];
-
+			console.log(1111111, order);
 			for (const item of items) {
 				orderItems.push(BodyToDbMapper({
 					body: {
