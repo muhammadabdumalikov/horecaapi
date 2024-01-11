@@ -23,7 +23,7 @@ module.exports.getAllMid = async (req, res, next) => {
 			});
 			return;
 		} else {
-			req.body = {
+			req.query = {
 				page: offset,
 				search: search ? search.trim() : "",
 			};
@@ -69,82 +69,9 @@ module.exports.createMid = async (req, res, next) => {
 	}
 };
 
-module.exports.updateMid = async (req, res, next) => {
-	try {
-		const { companyId,
-		  categoryId,
-		  barcode,
-		  image,
-		  countInBlock,
-		  description,
-		  countPrice,
-		  blockPrice,
-		  discountPrice,
-		  uzName,
-		  ruName,
-      enName,
-      id } = req?.body;
-		 if (newLine([uzName, ruName, enName])) {
-			res.status(449).json({
-				error: true,
-				message: "Yangi qatorlar bilan kiritish cheklangan",
-			});
-			return;
-		} else if (
-			uzName?.length < minLength ||
-			ruName?.length < minLength ||
-			enName?.length < minLength ||
-      barcode?.length < minLength ||
-      description?.length < minLength ||
-			image?.length < minLength ||
-			uzName?.length > maxLength ||
-			ruName?.length > maxLength ||
-      enName?.length > maxLength ||
-      barcode?.length > barcodeMaxLength ||
-      description?.length > descriptionMaxLength ||
-      image?.length > imageMaxlength
-		) {
-			res.status(449).json({
-				error: true,
-				message: `${maxLength} belgidan kam kiritish cheklangan yoki belgilangan limitdan ko'p belgi kiritilgan`,
-			});
-			return;
-		} else if (isNaN(id)) {
-			res.status(449).json({
-				error: true,
-				message: "ID uchun raqam kiriting",
-			});
-			return;
-		} else {
-			req.body = {
-				uzName: uzName?.trim(),
-				ruName: ruName?.trim(),
-        enName: enName?.trim(),
-        companyId,
-		    categoryId,
-		    barcode: barcode?.trim(),
-		    image: image?.trim(),
-		    countInBlock,
-		    description: description?.trim(),
-		    countPrice,
-		    blockPrice: blockPrice,
-		    discountPrice: discountPrice,
-				id: Number(id),
-			};
-			return await next();
-		}
-	} catch (e) {
-		res.status(500).json({
-			error: true,
-			message: `Server Midd xatolik: ${String(e)}`,
-		});
-		return;
-	}
-};
-
 module.exports.updateInAcMid = async (req, res, next) => {
 	try {
-		const { id } = req?.body;
+		const { id } = req?.query;
 		if (!id) {
 			res.status(449).json({
 				error: true,

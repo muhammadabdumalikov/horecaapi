@@ -7,7 +7,7 @@ const ProductModel = require("../models/products");
 
 module.exports.all = async (req, res) => {
 	try {
-		const { page } = req?.body;
+		const { page } = req?.query;
 		const data = await OrderModel.all(page);
 		if (!data) {
 			res.status(401).json({
@@ -123,42 +123,9 @@ module.exports.add = async (req, res) => {
 	}
 };
 
-module.exports.upd = async (req, res) => {
-	try {
-		const data = await BodyToDbMapper({ body: req.body, mapper: ProductBodyToDb, action: 'UPDATE' }, 'products');
-		
-		if (!data) {
-			res.status(401).json({
-				error: true,
-				message: `Ma'lumotlar topilmadi`,
-			});
-			return;
-		} else if (data?.severity) {
-			res.status(409).json({
-				error: true,
-				message: `Bazaviy xatolik ${String(data)}`,
-			});
-			return;
-		} else {
-			res.status(201).json({
-				error: false,
-				data,
-				message: "Muvaffaqiyatli bajarildi",
-			});
-			return;
-		}
-	} catch (e) {
-		res.status(500).json({
-			error: true,
-			message: `Server xatolik: ${String(e)}`,
-		});
-		return;
-	}
-};
-
 module.exports.inActive = async (req, res) => {
 	try {
-		const { id } = req?.body;
+		const { id } = req?.query;
 
 		const data = await OrderModel.inActive(id);
 

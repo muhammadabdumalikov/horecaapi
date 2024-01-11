@@ -7,7 +7,7 @@ const descriptionMaxLength = 512;
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { search, page, companyId, categoryId, active, limit } = req?.body;
+		const { search, page, companyId, categoryId, active, limit } = req?.query;
 		const offset = page ? (page - 1) * 2 : 0;
 
 		if (newLine([search])) {
@@ -23,7 +23,7 @@ module.exports.getAllMid = async (req, res, next) => {
 			});
 			return;
 		} else {
-			req.body = {
+			req.query = {
 				page: offset,
 				search: search ? search.trim() : "",
 				categoryId,
@@ -139,8 +139,9 @@ module.exports.updateMid = async (req, res, next) => {
 		  discountPrice,
 		  uzName,
 		  ruName,
-      enName,
-      id } = req?.body;
+			enName
+		} = req?.body;
+		const { id } = req.query;
 		 if (newLine([uzName, ruName, enName])) {
 			res.status(449).json({
 				error: true,
@@ -187,7 +188,8 @@ module.exports.updateMid = async (req, res, next) => {
 		    blockPrice: blockPrice,
 		    discountPrice: discountPrice,
 				id: Number(id),
-			};
+			 };
+			 req.query = { id };
 			return await next();
 		}
 	} catch (e) {
@@ -201,7 +203,7 @@ module.exports.updateMid = async (req, res, next) => {
 
 module.exports.updateInAcMid = async (req, res, next) => {
 	try {
-		const { id } = req?.body;
+		const { id } = req?.query;
 		if (!id) {
 			res.status(449).json({
 				error: true,

@@ -8,8 +8,7 @@ module.exports.all = async (req, res) => {
 	try {
 		// const messageKey = nanoid(15);
 		// const otp = Math.floor(10000 + Math.random() * 90000);
-
-		const body = req?.body;
+		const body = req?.query;
 		const data = await ProductModel.all(body);
 		if (!data) {
 			res.status(401).json({
