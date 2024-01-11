@@ -71,6 +71,66 @@ from counts p
 from a;
 `;
 
+module.exports.GET = `
+select
+	id,
+	company_id,
+	(
+		select
+			jsonb_build_object (
+				'uz_name', c.uz_name,
+				'ru_name', c.ru_name,
+				'en_name', c.en_name
+			)
+		from companies c where id = company_id
+	) company_name,
+	category_id,
+	(
+		select
+			jsonb_build_object (
+				'id', cg.id,
+				'uz_name', cg.uz_name,
+				'ru_name', cg.ru_name,
+				'en_name', cg.en_name
+			)
+		from categories cg where id = category_id
+	) category_name,
+	uz_name,
+	ru_name,
+	en_name,
+	barcode,
+	image,
+	blokda_soni,
+	description,
+	in_active,
+	to_char(created_at, 'hh24:mi / dd.mm.yy') created_at,
+	to_char(updated_at, 'hh24:mi / dd.mm.yy') updated_at,
+	(
+		select array(
+			select jsonb_build_object(
+				'id', cm.id,
+				'uz_name', cm.uz_name,
+				'ru_name', cm.ru_name,
+				'en_name', cm.en_name
+			)
+			from companies cm
+		)
+	) companies_list,
+	(
+		select array(
+			select jsonb_build_object(
+				'id', ctg.id,
+				'uz_name', ctg.uz_name,
+				'ru_name', ctg.ru_name,
+				'en_name', ctg.en_name
+			)
+			from categories ctg
+		)
+	) categories_list
+from products	
+where id = $1
+`;
+
 module.exports.CREATE = `
 insert into products (company_id, category_id, uz_name, ru_name, en_name, barcode, image, blok_soni, blokda_soni, description, dona_price, blok_price, disc_price)
 values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) returning id

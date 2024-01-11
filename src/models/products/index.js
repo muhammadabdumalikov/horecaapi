@@ -1,7 +1,14 @@
 const { fetch, fetchOne, fetchOneTransaction } = require("../../pg/pool");
-const { ALL, CREATE, UPDATE, INACTIVE, GET_ONE } = require("./model");
+const { ALL, CREATE, UPDATE, INACTIVE, GET_ONE, GET } = require("./model");
 
-module.exports.all = async ({search, page = 1, limit = 40, active = true, companyId, categoryId}) => {
+module.exports.all = async ({
+	search,
+	page = 1,
+	limit = 40,
+	active = true,
+	companyId,
+	categoryId,
+}) => {
 	return await fetchOne(
 		ALL,
 		`%${search}%`,
@@ -26,7 +33,7 @@ module.exports.create = async (
 	discountPrice,
 	uzName,
 	ruName,
-	enName,
+	enName
 ) => {
 	return await fetchOne(
 		CREATE,
@@ -42,7 +49,7 @@ module.exports.create = async (
 		description,
 		countPrice,
 		blockPrice,
-		discountPrice,
+		discountPrice
 	);
 };
 
@@ -80,12 +87,12 @@ module.exports.update = async (
 };
 
 module.exports.getOne = async (id) => {
-	return await fetchOne(GET_ONE, id);
-}
+	return await fetchOne(GET, id);
+};
 
 module.exports.getOneTransaction = async (id, client) => {
 	return await fetchOneTransaction(client, GET_ONE, id);
-}
+};
 
 module.exports.inActive = async (id) => {
 	return await fetchOne(INACTIVE, id);
