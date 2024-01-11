@@ -1,7 +1,7 @@
 const { ProductUnit } = require("../enums/index.enum");
 const ProductModel = require("../models/products");
 const { BodyToDbMapper, ProductBodyToDb } = require("../support/mappers");
-const smsService = require('../support/sms-sender')
+
 // import { nanoid } from 'nanoid';
 
 module.exports.all = async (req, res) => {
@@ -9,7 +9,7 @@ module.exports.all = async (req, res) => {
 		// const messageKey = nanoid(15);
 		// const otp = Math.floor(10000 + Math.random() * 90000);
 
-		// await smsService.sendSmsTo('998916084443', messageKey, otp);
+		
 
 		const body = req?.body;
 		const data = await ProductModel.all(body);

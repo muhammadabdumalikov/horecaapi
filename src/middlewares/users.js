@@ -8,22 +8,18 @@ module.exports.signupMid = async (req, res, next) => {
 	try {
 		const {
 			contact,
-			password,
 			fullname,
 			organization,
 			legalName,
-			lang,
 			location,
 			address,
 		} = req?.body;
 		if (
 			newLine([
 				contact,
-				password,
 				fullname,
 				organization,
 				legalName,
-				lang,
 				location,
 				address,
 			])
@@ -41,28 +37,12 @@ module.exports.signupMid = async (req, res, next) => {
 				ruMessage: "Номер телефона не отображается по умолчанию.",
 			});
 			return;
-		} else if (String(password).length < maxLengthPass) {
-			res.status(449).json({
-				error: true,
-				uzMessage: `Parol uchun minimum belgilar soni: ${maxLengthPass}`,
-				ruMessage: `Минимальное количество символов для пароля: ${maxLengthPass}`,
-			});
-			return;
-		} else if (!languages.includes(lang)) {
-			res.status(449).json({
-				error: true,
-				uzMessage: `Noto'g'ri til kiritildi`,
-				ruMessage: `Вводится неправильный язык`,
-			});
-			return;
 		} else {
 			req.body = {
 				contact: contact.trim(),
-				password: password.trim(),
 				fullname: fullname.trim(),
 				organization: organization.trim(),
 				legalName: legalName.trim(),
-				lang: lang.trim(),
 				location,
 				address: address.trim(),
 			};
@@ -80,25 +60,17 @@ module.exports.signupMid = async (req, res, next) => {
 
 module.exports.signinMid = async (req, res, next) => {
 	try {
-		const { contact, password } = req?.body;
-		if (!contact || !password) {
+		const { contact } = req?.body;
+		if (!contact) {
 			res.status(449).json({
 				error: true,
 				uzMessage: "Qatorlar to'ldirilganini tekshiring",
 				ruMessage: "Проверьте, заполнены ли строки",
 			});
 			return;
-		} else if (isNaN(password)) {
-			res.status(449).json({
-				error: true,
-				uzMessage: "Parol uchun raqam kiriting",
-				ruMessage: "Введите число для пароля",
-			});
-			return;
 		} else {
 			req.body = {
 				contact: String(contact).trim(),
-				password: String(password).trim(),
 			};
 			return await next();
 		}
@@ -114,12 +86,11 @@ module.exports.signinMid = async (req, res, next) => {
 
 module.exports.verifyPasswordMid = async (req, res, next) => {
 	try {
-		const { password } = req?.body;
-		const { userId } = req?.user;
-		if (!userId) {
+		const { keyId, password } = req?.body;
+		if (!keyId) {
 			res.status(449).json({
 				error: true,
-				uzMessage: "ID uchun raqam kiriting",
+				uzMessage: "ID kiriting",
 				ruMessage: "Введите номер для ID",
 			});
 			return;
@@ -139,6 +110,7 @@ module.exports.verifyPasswordMid = async (req, res, next) => {
 			return;
 		} else {
 			req.body = {
+				keyId: String(keyId).trim(),
 				password: String(password).trim(),
 			};
 			return await next();
@@ -155,25 +127,18 @@ module.exports.verifyPasswordMid = async (req, res, next) => {
 
 module.exports.retrySmsVerifyMid = async (req, res, next) => {
 	try {
-		const { password } = req?.body;
-		const { userId } = req?.user;
-		if (!userId) {
+		const { keyId } = req?.body;
+		console.log(req?.user);
+		if (!keyId) {
 			res.status(449).json({
 				error: true,
-				uzMessage: "ID uchun raqam kiriting",
+				uzMessage: "ID kiriting",
 				ruMessage: "Введите номер для ID",
-			});
-			return;
-		} else if (!password) {
-			res.status(449).json({
-				error: true,
-				uzMessage: "Qatorlar to'ldirilganini tekshiring",
-				ruMessage: "Проверьте, заполнены ли строки",
 			});
 			return;
 		} else {
 			req.body = {
-				password: String(password).trim(),
+				keyId: String(keyId).trim(),
 			};
 			return await next();
 		}

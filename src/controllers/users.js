@@ -1,26 +1,23 @@
 const UsersModel = require("../models/users");
 const jwt = require("../jwt");
+const smsService = require("../support/sms-sender");
 
 module.exports.signup = async (req, res) => {
 	try {
 		const {
 			contact,
-			password,
 			fullname,
 			organization,
 			legalName,
-			lang,
 			location,
 			address,
 		} = req?.body;
 
 		const data = await UsersModel.signUp(
 			contact,
-			password,
 			fullname,
 			organization,
 			legalName,
-			lang,
 			location,
 			address
 		);
@@ -79,10 +76,17 @@ module.exports.signup = async (req, res) => {
 			});
 			return;
 		} else {
+			const signupUser = data?.signup_user;
+			await smsService.sendSmsTo(
+				contact,
+				signupUser?.keyId,
+				signupUser?.verifyPass
+			);
 			const accessToken = jwt.signUser(data?.signup_user);
+			delete signupUser.verifyPass;
 			res.status(200).json({
 				error: false,
-				data: data?.signup_user,
+				data: signupUser,
 				accessToken,
 			});
 			return;
@@ -99,8 +103,9 @@ module.exports.signup = async (req, res) => {
 
 module.exports.signin = async (req, res) => {
 	try {
-		const { contact, password } = req?.body;
-		const data = await UsersModel.signin(contact, password);
+		const { contact } = req?.body;
+		const data = await UsersModel.signin(contact);
+		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -132,11 +137,16 @@ module.exports.signin = async (req, res) => {
 			});
 			return;
 		} else {
-			const accessToken = jwt.signUser(data?.sign_in);
+			const signinUser = data?.sign_in;
+			await smsService.sendSmsTo(
+				contact,
+				signinUser?.keyId,
+				signinUser?.verifyPass
+			);
+			delete signinUser.verifyPass;
 			res.status(200).json({
 				error: false,
-				data: data?.sign_in,
-				accessToken,
+				data: signinUser,
 			});
 			return;
 		}
@@ -152,9 +162,9 @@ module.exports.signin = async (req, res) => {
 
 module.exports.verifyPassword = async (req, res) => {
 	try {
-		const { password } = req?.body;
-		const { userId } = req?.user;
-		const data = await UsersModel.verifyPassword(userId, password);
+		const { keyId, password } = req?.body;
+		const data = await UsersModel.verifyPassword(keyId, password);
+		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -208,8 +218,9 @@ module.exports.verifyPassword = async (req, res) => {
 
 module.exports.retrySmsVerify = async (req, res) => {
 	try {
-		const { userId } = req?.user;
-		const data = await UsersModel.retrySmsVerify(userId);
+		const { keyId } = req?.body;
+		const data = await UsersModel.retrySmsVerify(keyId);
+		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -243,11 +254,17 @@ module.exports.retrySmsVerify = async (req, res) => {
 			});
 			return;
 		} else {
-			const accessToken = jwt.signUser(data?.retry_sms_pass);
+			const retryUser = data?.retry_sms_pass;
+			await smsService.sendSmsTo(
+				retryUser?.contact,
+				retryUser?.keyId,
+				retryUser?.verifyPass
+			);
+			delete retryUser.verifyPass;
+
 			res.status(200).json({
 				error: false,
-				data: data?.retry_sms_pass,
-				accessToken,
+				data: retryUser,
 			});
 			return;
 		}

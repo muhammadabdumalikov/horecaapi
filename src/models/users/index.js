@@ -9,37 +9,35 @@ const {
 
 module.exports.signUp = async (
 	contact,
-	password,
 	fullname,
 	organization,
 	legalName,
-	lang,
 	location,
 	address
 ) => {
+	// console.log(contact, fullname, organization, legalName, location, address);
 	return await fetchOne(
 		SIGNUP,
 		contact,
-		password,
 		fullname,
 		organization,
 		legalName,
-		lang,
 		location,
 		address
 	);
 };
 
-module.exports.signin = async (contact, password) => {
-	return await fetchOne(SIGIN, contact, password);
+module.exports.signin = async (contact) => {
+	return await fetchOne(SIGIN, contact);
 };
 
 module.exports.verifyPassword = async (userId, password) => {
+	console.log(userId, password);
 	return await fetchOne(VERIFYPASSWORD, userId, password);
 };
 
-module.exports.retrySmsVerify = async (userId) => {
-	return await fetchOne(RETRYVERIFYPASSWORD, userId);
+module.exports.retrySmsVerify = async (keyId) => {
+	return await fetchOne(RETRYVERIFYPASSWORD, keyId);
 };
 
 module.exports.all = async (search, page) => {

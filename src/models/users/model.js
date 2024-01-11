@@ -67,11 +67,11 @@ returning id, in_active
 `;
 
 module.exports.SIGNUP = `
-	select signup_user ($1, $2, $3, $4, $5, $6, $7, $8)
+	select signup_user ($1, $2, $3, $4, $5, $6)
 `;
 
 module.exports.SIGIN = `
-	select sign_in ($1, $2)
+	select sign_in ($1)
 `;
 
 module.exports.VERIFYPASSWORD = `

@@ -15,29 +15,21 @@ module.exports.signAdmin = ({ id, username, inActive, createdAt }) => {
 };
 
 module.exports.signUser = ({
-	id,
-	status,
-	firstname,
-	lastname,
-	pwr,
-	profile,
-	isVerified,
-	verifyPass,
+	userId,
+	contact,
 	fullname,
-	companyName,
+	inActive,
+	legalName,
+	isVerified,
+	organization
 }) => {
 	return jwt.sign(
 		{
-			id,
-			status,
-			firstname,
-			lastname,
-			pwr,
-			profile,
-			isVerified,
-			verifyPass,
+			userId,
+			contact,
 			fullname,
-			companyName,
+			inActive,
+			isVerified,
 		},
 		process.env.JWT_SECRET_KEY,
 		{ expiresIn: "30d" }
