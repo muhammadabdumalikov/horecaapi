@@ -74,59 +74,59 @@ from a;
 module.exports.GET = `
 select
 	id,
-	company_id,
+	company_id as "companyId",
 	(
 		select
 			jsonb_build_object (
-				'uz_name', c.uz_name,
-				'ru_name', c.ru_name,
-				'en_name', c.en_name
+				'uzName', c.uz_name,
+				'ruName', c.ru_name,
+				'enName', c.en_name
 			)
 		from companies c where id = company_id
-	) company_name,
-	category_id,
+	) as "companyName",
+	category_id as "categoryId",
 	(
 		select
 			jsonb_build_object (
 				'id', cg.id,
-				'uz_name', cg.uz_name,
-				'ru_name', cg.ru_name,
-				'en_name', cg.en_name
+				'uzName', cg.uz_name,
+				'ruName', cg.ru_name,
+				'enName', cg.en_name
 			)
 		from categories cg where id = category_id
-	) category_name,
-	uz_name,
-	ru_name,
-	en_name,
+	) as "categoryName",
+	uz_name as "uzName",
+	ru_name as "ruName",
+	en_name as "enName",
 	barcode,
 	image,
-	blokda_soni,
+	blokda_soni as "blokdaSoni",
 	description,
-	in_active,
-	to_char(created_at, 'hh24:mi / dd.mm.yy') created_at,
-	to_char(updated_at, 'hh24:mi / dd.mm.yy') updated_at,
+	in_active as "inActive",
+	to_char(created_at, 'hh24:mi / dd.mm.yy') as "createdAt",
+	to_char(updated_at, 'hh24:mi / dd.mm.yy') as "updatedAt",
 	(
 		select array(
 			select jsonb_build_object(
 				'id', cm.id,
-				'uz_name', cm.uz_name,
-				'ru_name', cm.ru_name,
-				'en_name', cm.en_name
+				'uzName', cm.uz_name,
+				'ruName', cm.ru_name,
+				'enName', cm.en_name
 			)
 			from companies cm
 		)
-	) companies_list,
+	) as companiesList,
 	(
 		select array(
 			select jsonb_build_object(
 				'id', ctg.id,
-				'uz_name', ctg.uz_name,
-				'ru_name', ctg.ru_name,
-				'en_name', ctg.en_name
+				'uzName', ctg.uz_name,
+				'ruName', ctg.ru_name,
+				'enName', ctg.en_name
 			)
 			from categories ctg
 		)
-	) categories_list
+	) as "categoriesList"
 from products	
 where id = $1
 `;
