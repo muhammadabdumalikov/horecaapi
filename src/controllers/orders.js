@@ -157,3 +157,39 @@ module.exports.inActive = async (req, res) => {
 		return;
 	}
 };
+
+module.exports.getOwnOrders = async (req, res) => {
+	try {
+		const { page, limit, active } = req?.query;
+		const { id } = req?.user;
+
+		const data = await OrderModel.getOwnOrders({userId: id, page, limit, active});
+
+		if (!data) {
+			res.status(401).json({
+				error: true,
+				message: `Ma'lumotlar topilmadi`,
+			});
+			return;
+		} else if (data?.severity) {
+			res.status(409).json({
+				error: true,
+				message: `Bazaviy xatolik ${String(data)}`,
+			});
+			return;
+		} else {
+			res.status(202).json({
+				error: false,
+				data,
+				message: "Muvaffaqiyatli bajarildi",
+			});
+			return;
+		}
+	} catch (e) {
+		res.status(500).json({
+			error: true,
+			message: `Server xatolik: ${String(e)}`,
+		});
+		return;
+	}
+};

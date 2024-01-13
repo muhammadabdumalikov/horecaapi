@@ -11,5 +11,6 @@ const { verify } = require("../jwt");
 router.get("/", getAllMid, Orders.all);
 router.post("/create", createMid, Orders.add);
 router.put("/in-active", updateInAcMid, Orders.inActive);
+router.get("/my", verify, getAllMid, Orders.getOwnOrders);
 
 module.exports = router;

@@ -55,3 +55,42 @@ select * from orders
 	where id = $1 limit 1
 `;
 
+module.exports.GET_OWN_ORDERS = `
+with counts as (select count(id)
+                from orders where user_id = $1),
+     a as (select array(
+                          select jsonb_build_object(
+                                         'number', row_number() OVER (order by o.id),
+                                         'id', o.id,
+                                         'typeOfProducts', count(oi.id),
+                                         'sum', o.total_sum,
+                                         'paymentType', o.payment_type,
+                                         'createdAt', to_char(o.created_at, 'hh24:mi / dd.mm.yy'),
+                                         'updatedAt', to_char(o.updated_at, 'hh24:mi / dd.mm.yy')
+                                     )
+                          from orders o
+                                join order_items oi on o.id = oi.order_id
+                          where o.user_id = $1
+                          where o.in_active is true
+                          group by o.id
+                          order by o.created_at
+			              limit $3 offset $2
+                      ) list,
+                    jsonb_build_object(
+		                'count', p.count,
+		                'pages', case
+					                when p.count = 0 then 0
+					                when p.count < ($3 + 1) then 1
+					                when (mod(p.count, $3)) >= 1 then ((p.count / $3) + 1)
+					            else (p.count / $3)
+				                end,
+		                'page', case
+					                when p.count = 0 then 0
+					               else $2 / $3 + 1
+				                end 
+	                ) more_info
+                    from counts p)
+                select more_info,
+                    list
+                from a;
+`;

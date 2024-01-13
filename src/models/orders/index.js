@@ -1,5 +1,5 @@
 const { fetch, fetchOne, fetchOneTransaction } = require("../../pg/pool");
-const { ALL, CREATE, UPDATE, INACTIVE, GET_ONE } = require("./model");
+const { ALL, CREATE, UPDATE, INACTIVE, GET_ONE, GET_OWN_ORDERS } = require("./model");
 
 module.exports.all = async (page) => {
 	return await fetchOne(ALL, page);
@@ -80,3 +80,18 @@ module.exports.getOne = async (id) => {
 module.exports.getOneTransaction = async (id, client) => {
 	return await fetchOneTransaction(client, GET_ONE, id);
 }
+
+module.exports.getOwnOrders = async ({
+	userId,
+	page = 1,
+	limit = 40,
+	active = true,
+}) => {
+	return await fetchOne(
+		GET_OWN_ORDERS,
+		userId,
+		page,
+		limit,
+		active,
+	);
+};
