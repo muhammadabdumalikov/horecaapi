@@ -6,6 +6,7 @@ const {
 	signinMid,
 	verifyPasswordMid,
 	retrySmsVerifyMid,
+	getOneMid,
 } = require("../middlewares/users");
 const { verify } = require("../jwt");
 
@@ -14,6 +15,7 @@ router.post("/signup", signupMid, Users.signup);
 router.post("/signin", signinMid, Users.signin);
 router.post("/verify", verifyPasswordMid, Users.verifyPassword);
 router.post("/r-sms", retrySmsVerifyMid, Users.retrySmsVerify);
+router.get("/find", verify, getOneMid, Users.getOne);
 // router.put("/update", verify, updateMid, Users.upd);
 // router.put("/in-active", verify, updateInAcMid, Users.inActive);
 

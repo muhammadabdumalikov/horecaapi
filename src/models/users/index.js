@@ -5,6 +5,7 @@ const {
 	SIGIN,
 	VERIFYPASSWORD,
 	RETRYVERIFYPASSWORD,
+	GETONE,
 } = require("./model");
 
 module.exports.signUp = async (
@@ -42,4 +43,8 @@ module.exports.retrySmsVerify = async (keyId) => {
 
 module.exports.all = async (search, page) => {
 	return await fetchOne(ALL, `%${search}%`, page);
+};
+
+module.exports.getOne = async (userId) => {
+	return await fetchOne(GETONE, userId);
 };

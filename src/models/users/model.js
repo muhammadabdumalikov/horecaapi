@@ -1,3 +1,20 @@
+module.exports.GETONE = `
+	select
+		id,
+		contact,
+		fullname,
+		organization,
+		legal_name,
+		location,
+		address,
+		ntfs,
+		is_verify,
+		in_active,
+		to_char(created_at, 'hh24:mi / dd.mm.yy') created_at,
+		to_char(updated_at, 'hh24:mi / dd.mm.yy') updated_at
+	from users where id = $1	
+`;
+
 module.exports.ALL = `
 with counts as (
 	select count(id) 

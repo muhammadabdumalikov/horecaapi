@@ -178,3 +178,29 @@ module.exports.updateInAcMid = async (req, res, next) => {
 		return;
 	}
 };
+module.exports.getOneMid = async (req, res, next) => {
+	try {
+		const { userId } = req?.user;
+		if (!userId) {
+			res.status(449).json({
+				error: true,
+				message: "Qatorlar to'ldirilganini tekshiring",
+			});
+			return;
+		} else if (userId && isNaN(userId)) {
+			res.status(449).json({
+				error: true,
+				message: "ID uchun raqam kiriting",
+			});
+			return;
+		} else {
+			return await next();
+		}
+	} catch (e) {
+		res.status(500).json({
+			error: true,
+			message: `Server Midd xatolik: ${String(e)}`,
+		});
+		return;
+	}
+};
