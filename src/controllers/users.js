@@ -179,14 +179,14 @@ module.exports.verifyPassword = async (req, res) => {
 			});
 			return;
 		} else if (!data?.verify_gmail_password_u) {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Ma'lumotlar topilmadi`,
 				ruMessage: `Данные не найдены`,
 			});
 			return;
 		} else if (data?.verify_gmail_password_u?.error) {
-			res.status(403).json({
+			res.status(402).json({
 				error: true,
 				uzMessage: `${data?.verify_gmail_password_u?.uzMessage}`,
 				ruMessage: `${data?.verify_gmail_password_u?.ruMessage}`,
