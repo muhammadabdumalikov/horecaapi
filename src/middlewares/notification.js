@@ -4,7 +4,7 @@ const maxSize = 1024 * 1024 * 2; // max size 3 MB
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { pageIndex, search, pageSize } = req?.query;
+		const { pageIndex, search, pageSize, active } = req?.query;
 		const l = pageSize && isNumber(Number(pageSize)) ? pageSize : 40;
 		const offset = pageIndex ? (pageIndex - 1) * Number(l) : 0;
 
@@ -23,7 +23,14 @@ module.exports.getAllMid = async (req, res, next) => {
 		} else {
 			req.body = {
 				page: offset,
+				limit: l,
 				search: search ? search.trim() : "",
+				active:
+					active === "true"
+						? active
+						: active === "false"
+						? active
+						: null,
 			};
 			return await next();
 		}

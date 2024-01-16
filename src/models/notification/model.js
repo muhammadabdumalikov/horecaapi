@@ -16,7 +16,7 @@ with counts as (
 					'number', row_number() OVER (order by c.id),
 					'id', c.id,
 					'topic', c.topic,
-					'content', c.content,
+					'content', left(c.content, 15),
 					'image', c.image,
 					'in_active', c.in_active,
 					'created_at', to_char(c.created_at, 'hh24:mi / dd.mm.yy'),
@@ -30,7 +30,7 @@ with counts as (
 			end
 			and c.in_active = case when $3::bool is not null then $3::bool else c.in_active end
 			order by c.id
-			limit 40 offset $2
+			limit $4 offset $2
 	) list,
 	jsonb_build_object(
 		'count', c.count,
