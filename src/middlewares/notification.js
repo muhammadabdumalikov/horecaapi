@@ -1,11 +1,12 @@
-const { newLine } = require("../support/types");
+const { newLine, isNumber } = require("../support/types");
 const { makeid } = require("../support/files");
 const maxSize = 1024 * 1024 * 3; // max size 3 MB
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { page, search } = req?.query;
-		const offset = page ? (page - 1) * 40 : 0;
+		const { pageIndex, search, pageSize } = req?.query;
+		const l = pageSize && isNumber(Number(pageSize)) ? pageSize : 40;
+		const offset = pageIndex ? (pageIndex - 1) * Number(l) : 0;
 
 		if (newLine([search])) {
 			res.status(449).json({
@@ -13,7 +14,7 @@ module.exports.getAllMid = async (req, res, next) => {
 				message: "Yangi qatorlar bilan kiritish cheklangan",
 			});
 			return;
-		} else if (page && isNaN(offset)) {
+		} else if (pageIndex && isNaN(offset)) {
 			res.status(449).json({
 				error: true,
 				message: "Sahifa uchun raqam kiriting",

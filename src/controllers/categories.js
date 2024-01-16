@@ -2,8 +2,8 @@ const CategoryModel = require("../models/categories");
 
 module.exports.all = async (req, res) => {
 	try {
-		const { search, page } = req?.body;
-		const data = await CategoryModel.all(search, page);
+		const { search, page, active, limit } = req?.body;
+		const data = await CategoryModel.all(search, page, active, limit);
 		if (!data) {
 			res.status(401).json({
 				error: true,

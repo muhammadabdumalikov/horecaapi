@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
@@ -20,8 +21,10 @@ app.use(
 );
 app.set("trust proxy", 1);
 app.use(sessionMiddleware);
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static("views"));
 app.use(fileUpload());
 app.use(function (error, req, res, next) {

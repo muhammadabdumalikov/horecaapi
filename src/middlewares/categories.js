@@ -1,19 +1,18 @@
-const { newLine } = require("../support/types");
+const { newLine, isNumber } = require("../support/types");
 const maxLength = 3;
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { page, search } = req?.query;
-		const l = isNumber(Number(limit)) ? limit : 40;
-		const offset = page ? (page - 1) * Number(l) : 0;
-
+		const { pageIndex, search, pageSize, active } = req?.query;
+		const l = pageSize && isNumber(Number(pageSize)) ? pageSize : 40;
+		const offset = pageIndex ? (pageIndex - 1) * Number(l) : 0;
 		if (newLine([search])) {
 			res.status(449).json({
 				error: true,
 				message: "Yangi qatorlar bilan kiritish cheklangan",
 			});
 			return;
-		} else if (page && isNaN(offset)) {
+		} else if (pageIndex && isNaN(offset)) {
 			res.status(449).json({
 				error: true,
 				message: "Sahifa uchun raqam kiriting",
