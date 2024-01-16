@@ -7,6 +7,7 @@ with counts as (
 			when $1::text <> '%""%' then $1
 			else concat(fullname, contact)
 		end
+		and c.in_active = case when $3::bool is not null then $3::bool else c.in_active end
 ), a as (
 	select
 	array (
@@ -30,8 +31,9 @@ with counts as (
 				when $1::text <> '%""%'::text then $1
 				else concat(fullname, contact)
 			end
+			and c.in_active = case when $3::bool is not null then $3 else c.i
 			order by c.id
-			limit 40 offset $2
+			limit $4 offset $2
 	) list,
 	array(
 		select
@@ -49,13 +51,13 @@ with counts as (
 		'count', c.count,
 		'pages', case
 					when c.count = 0 then 0
-					when c.count < 41 then 1
-					when (mod(c.count, 40)) >= 1 then ((c.count / 40) + 1)
-					else (c.count / 40)
+					when c.count < ($4 + 1) then 1
+					when (mod(c.count, $4)) >= 1 then ((c.count / $4) + 1)
+					else (c.count / $4)
 				end,
 		'page', case
 					when c.count = 0 then 0
-					else $2 / 40 + 1
+					else $2 / $4 + 1
 				end 
 	) more_info
 from counts c

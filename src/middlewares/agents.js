@@ -4,8 +4,9 @@ const maxLength = 3,
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { page, search } = req?.query;
-		const offset = page ? (page - 1) * 40 : 0;
+		const { page, search, active, limit } = req?.query;
+		const l = isNumber(Number(limit)) ? limit : 40;
+		const offset = page ? (page - 1) * Number(l) : 0;
 
 		if (newLine([search])) {
 			res.status(449).json({
@@ -23,6 +24,13 @@ module.exports.getAllMid = async (req, res, next) => {
 			req.body = {
 				page: offset,
 				search: search ? search.trim() : "",
+				limit: l,
+				active:
+					active === "true"
+						? active
+						: active === "false"
+						? active
+						: null,
 			};
 			return await next();
 		}

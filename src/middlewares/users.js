@@ -1,6 +1,6 @@
 const { newLine } = require("../support/types");
 const maxLength = 3,
-	contactLenth = 12,
+	contactLenth = 13,
 	maxLengthPass = 5,
 	languages = ["uz", "ru", "en"];
 

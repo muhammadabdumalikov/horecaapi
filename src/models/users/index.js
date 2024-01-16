@@ -1,6 +1,5 @@
 const { fetch, fetchOne } = require("../../pg/pool");
 const {
-	ALL,
 	SIGNUP,
 	SIGIN,
 	VERIFYPASSWORD,
@@ -16,7 +15,6 @@ module.exports.signUp = async (
 	location,
 	address
 ) => {
-	// console.log(contact, fullname, organization, legalName, location, address);
 	return await fetchOne(
 		SIGNUP,
 		contact,
@@ -33,7 +31,6 @@ module.exports.signin = async (contact) => {
 };
 
 module.exports.verifyPassword = async (userId, password) => {
-	console.log(userId, password);
 	return await fetchOne(VERIFYPASSWORD, userId, password);
 };
 
