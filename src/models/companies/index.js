@@ -1,8 +1,8 @@
 const { fetch, fetchOne } = require("../../pg/pool");
 const { ALL, CREATE, UPDATE, INACTIVE } = require("./model");
 
-module.exports.all = async (search, page) => {
-	return await fetchOne(ALL, `%${search}%`, page);
+module.exports.all = async (search, page, active = true, limit = 40) => {
+	return await fetchOne(ALL, `%${search}%`, page, active, limit);
 };
 
 module.exports.create = async (

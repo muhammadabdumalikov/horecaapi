@@ -21,7 +21,7 @@ module.exports.signup = async (req, res) => {
 			location,
 			address
 		);
-
+		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -30,49 +30,45 @@ module.exports.signup = async (req, res) => {
 			});
 			return;
 		} else if (data.constraint === "user_contact_uniq") {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Bu telefon raqam avval band qilingan`,
 				ruMessage: `Этот телефон номер был забронирован ранее`,
 			});
 			return;
 		} else if (data.constraint === "user_organization_uniq") {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Bu nom avval ro'yxatdan o'tgan`,
 				ruMessage: `Это имя было зарегистрировано ранее`,
 			});
 			return;
 		} else if (data.constraint === "user_legal_name_uniq") {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Bu nom avval ro'yxatdan o'tgan`,
 				ruMessage: `Это имя было зарегистрировано ранее`,
 			});
 			return;
 		} else if (data?.severity) {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Bazaviy xatolik: ${String(data)}`,
 				ruMessage: `Ошибка базы данных: ${String(data)}`,
 			});
 			return;
 		} else if (!data?.signup_user) {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Bazaviy xatolik: ${String(data)}`,
 				ruMessage: `Ошибка базы данных: ${String(data)}`,
 			});
 			return;
 		} else if (data?.signup_user?.error) {
-			res.status(403).json({
+			res.status(200).json({
 				error: true,
-				uzMessage: `Bazaviy xatolik: ${String(
-					data?.signup_user?.message
-				)}`,
-				ruMessage: `Ошибка базы данных: ${String(
-					data?.signup_user?.message
-				)}`,
+				uzMessage: data?.signup_user?.uzMessage,
+				ruMessage: data?.signup_user?.ruMessage,
 			});
 			return;
 		} else {
@@ -87,7 +83,6 @@ module.exports.signup = async (req, res) => {
 			res.status(200).json({
 				error: false,
 				data: signupUser,
-				accessToken,
 			});
 			return;
 		}
@@ -123,7 +118,7 @@ module.exports.signin = async (req, res) => {
 			});
 			return;
 		} else if (!data?.sign_in) {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Ma'lumotlar topilmadi`,
 				ruMessage: `Данные не найдены`,
@@ -165,7 +160,6 @@ module.exports.verifyPassword = async (req, res) => {
 	try {
 		const { keyId, password } = req?.body;
 		const data = await UsersModel.verifyPassword(keyId, password);
-		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -221,7 +215,6 @@ module.exports.retrySmsVerify = async (req, res) => {
 	try {
 		const { keyId } = req?.body;
 		const data = await UsersModel.retrySmsVerify(keyId);
-		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -241,14 +234,14 @@ module.exports.retrySmsVerify = async (req, res) => {
 			});
 			return;
 		} else if (!data?.retry_sms_pass) {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `Ma'lumotlar topilmadi`,
 				ruMessage: `Данные не найдены`,
 			});
 			return;
 		} else if (data?.retry_sms_pass?.error) {
-			res.status(403).json({
+			res.status(401).json({
 				error: true,
 				uzMessage: `${data?.retry_sms_pass?.uzMessage}`,
 				ruMessage: `${data?.retry_sms_pass?.ruMessage}`,

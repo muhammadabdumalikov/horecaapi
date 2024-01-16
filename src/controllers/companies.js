@@ -2,8 +2,8 @@ const CompanyModel = require("../models/companies");
 
 module.exports.all = async (req, res) => {
 	try {
-		const { search, page } = req?.body;
-		const data = await CompanyModel.all(search, page);
+		const { search, page, active, limit } = req?.body;
+		const data = await CompanyModel.all(search, page, active, limit);
 
 		if (!data) {
 			res.status(401).json({

@@ -7,7 +7,8 @@ const descriptionMaxLength = 512;
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { search, page, companyId, categoryId, active, limit } = req?.query;
+		const { search, page, companyId, categoryId, active, limit } =
+			req?.query;
 		const offset = page ? (page - 1) * 2 : 0;
 
 		if (newLine([search])) {
@@ -29,7 +30,7 @@ module.exports.getAllMid = async (req, res, next) => {
 				categoryId,
 				companyId,
 				active,
-				limit
+				limit,
 			};
 			return await next();
 		}
@@ -44,31 +45,34 @@ module.exports.getAllMid = async (req, res, next) => {
 
 module.exports.createMid = async (req, res, next) => {
 	try {
-		const { companyId,
-		  categoryId,
-		  barcode,
-		  image,
-		  countInBlock,
-		  description,
+		const {
+			companyId,
+			categoryId,
+			barcode,
+			image,
+			countInBlock,
+			description,
 			countPrice,
 			blockCount,
-		  blockPrice,
-		  discountPrice,
-		  uzName,
-		  ruName,
-      enName
-    } = req?.body;
-    if (!uzName ||
-      !ruName ||
-      !enName ||
-      !companyId ||
-		  !categoryId ||
+			blockPrice,
+			discountPrice,
+			uzName,
+			ruName,
+			enName,
+		} = req?.body;
+		if (
+			!uzName ||
+			!ruName ||
+			!enName ||
+			!companyId ||
+			!categoryId ||
 			!barcode ||
 			!blockCount ||
-		  !image ||
-		  !countInBlock ||
-		  !description ||
-			!countPrice) {
+			!image ||
+			!countInBlock ||
+			!description ||
+			!countPrice
+		) {
 			res.status(449).json({
 				error: true,
 				message: "Qatorlar to'ldirilganini tekshiring",
@@ -84,15 +88,15 @@ module.exports.createMid = async (req, res, next) => {
 			uzName?.length < minLength ||
 			ruName?.length < minLength ||
 			enName?.length < minLength ||
-      barcode?.length < minLength ||
-      description?.length < minLength ||
+			barcode?.length < minLength ||
+			description?.length < minLength ||
 			image?.length < minLength ||
 			uzName?.length > maxLength ||
 			ruName?.length > maxLength ||
-      enName?.length > maxLength ||
-      barcode?.length > barcodeMaxLength ||
-      description?.length > descriptionMaxLength ||
-      image?.length > imageMaxlength
+			enName?.length > maxLength ||
+			barcode?.length > barcodeMaxLength ||
+			description?.length > descriptionMaxLength ||
+			image?.length > imageMaxlength
 		) {
 			res.status(449).json({
 				error: true,
@@ -103,17 +107,17 @@ module.exports.createMid = async (req, res, next) => {
 			req.body = {
 				uzName: uzName.trim(),
 				ruName: ruName.trim(),
-        enName: enName.trim(),
-        companyId,
-		    categoryId,
-		    barcode: barcode?.trim(),
+				enName: enName.trim(),
+				companyId,
+				categoryId,
+				barcode: barcode?.trim(),
 				image: image.trim(),
 				blockCount,
-		    countInBlock,
-		    description: description?.trim(),
-		    countPrice,
-		    blockPrice: blockPrice,
-		    discountPrice: discountPrice,
+				countInBlock,
+				description: description?.trim(),
+				countPrice,
+				blockPrice: blockPrice,
+				discountPrice: discountPrice,
 			};
 			return await next();
 		}
@@ -128,21 +132,22 @@ module.exports.createMid = async (req, res, next) => {
 
 module.exports.updateMid = async (req, res, next) => {
 	try {
-		const { companyId,
-		  categoryId,
-		  barcode,
-		  image,
-		  countInBlock,
-		  description,
-		  countPrice,
-		  blockPrice,
-		  discountPrice,
-		  uzName,
-		  ruName,
-			enName
+		const {
+			companyId,
+			categoryId,
+			barcode,
+			image,
+			countInBlock,
+			description,
+			countPrice,
+			blockPrice,
+			discountPrice,
+			uzName,
+			ruName,
+			enName,
 		} = req?.body;
 		const { id } = req.query;
-		 if (newLine([uzName, ruName, enName])) {
+		if (newLine([uzName, ruName, enName])) {
 			res.status(449).json({
 				error: true,
 				message: "Yangi qatorlar bilan kiritish cheklangan",
@@ -152,15 +157,15 @@ module.exports.updateMid = async (req, res, next) => {
 			uzName?.length < minLength ||
 			ruName?.length < minLength ||
 			enName?.length < minLength ||
-      barcode?.length < minLength ||
-      description?.length < minLength ||
+			barcode?.length < minLength ||
+			description?.length < minLength ||
 			image?.length < minLength ||
 			uzName?.length > maxLength ||
 			ruName?.length > maxLength ||
-      enName?.length > maxLength ||
-      barcode?.length > barcodeMaxLength ||
-      description?.length > descriptionMaxLength ||
-      image?.length > imageMaxlength
+			enName?.length > maxLength ||
+			barcode?.length > barcodeMaxLength ||
+			description?.length > descriptionMaxLength ||
+			image?.length > imageMaxlength
 		) {
 			res.status(449).json({
 				error: true,
@@ -177,19 +182,19 @@ module.exports.updateMid = async (req, res, next) => {
 			req.body = {
 				uzName: uzName?.trim(),
 				ruName: ruName?.trim(),
-        enName: enName?.trim(),
-        companyId,
-		    categoryId,
-		    barcode: barcode?.trim(),
-		    image: image?.trim(),
-		    countInBlock,
-		    description: description?.trim(),
-		    countPrice,
-		    blockPrice: blockPrice,
-		    discountPrice: discountPrice,
+				enName: enName?.trim(),
+				companyId,
+				categoryId,
+				barcode: barcode?.trim(),
+				image: image?.trim(),
+				countInBlock,
+				description: description?.trim(),
+				countPrice,
+				blockPrice: blockPrice,
+				discountPrice: discountPrice,
 				id: Number(id),
-			 };
-			 req.query = { id };
+			};
+			req.query = { id };
 			return await next();
 		}
 	} catch (e) {
@@ -203,7 +208,7 @@ module.exports.updateMid = async (req, res, next) => {
 
 module.exports.updateInAcMid = async (req, res, next) => {
 	try {
-		const { id } = req?.query;
+		const { id } = req?.body;
 		if (!id) {
 			res.status(449).json({
 				error: true,
