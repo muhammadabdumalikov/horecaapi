@@ -1,13 +1,10 @@
 const { ProductUnit } = require("../enums/index.enum");
 const ProductModel = require("../models/products");
 const { BodyToDbMapper, ProductBodyToDb } = require("../support/mappers");
-
-// import { nanoid } from 'nanoid';
+const pathFile = "product";
 
 module.exports.all = async (req, res) => {
 	try {
-		// const messageKey = nanoid(15);
-		// const otp = Math.floor(10000 + Math.random() * 90000);
 		const body = req?.query;
 		const data = await ProductModel.all(body);
 		if (!data) {
@@ -44,7 +41,7 @@ module.exports.add = async (req, res) => {
 			companyId,
 			categoryId,
 			barcode,
-			image,
+			imageName,
 			countInBlock,
 			description,
 			countPrice,
@@ -55,11 +52,13 @@ module.exports.add = async (req, res) => {
 			ruName,
 			enName,
 		} = req?.body;
+		console.log(discountPrice);
+		const imageSrc = `${pathFile}/${imageName}`;
 		const data = await ProductModel.create(
 			companyId,
 			categoryId,
 			barcode,
-			image,
+			imageSrc,
 			countInBlock,
 			description,
 			countPrice,
@@ -70,7 +69,7 @@ module.exports.add = async (req, res) => {
 			ruName,
 			enName
 		);
-
+		const image = req?.files?.file;
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -84,6 +83,9 @@ module.exports.add = async (req, res) => {
 			});
 			return;
 		} else {
+			image.mv(`views/${imageSrc}`, async (err, succ) => {
+				if (err) throw err;
+			});
 			res.status(201).json({
 				error: false,
 				data,

@@ -4,7 +4,7 @@ module.exports.all = async (req, res) => {
 	try {
 		const { search, page, active, limit } = req?.body;
 		const data = await AgentModel.all(search, page, active, limit);
-
+		console.log(data);
 		if (!data) {
 			res.status(401).json({
 				error: true,

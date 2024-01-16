@@ -21,7 +21,7 @@ module.exports.signup = async (req, res) => {
 			location,
 			address
 		);
-		console.log(data);
+
 		if (!data) {
 			res.status(400).json({
 				error: true,

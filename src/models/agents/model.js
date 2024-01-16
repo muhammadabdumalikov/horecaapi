@@ -31,7 +31,7 @@ with counts as (
 				when $1::text <> '%""%'::text then $1
 				else concat(fullname, contact)
 			end
-			and c.in_active = case when $3::bool is not null then $3 else c.i
+			and c.in_active = case when $3::bool is not null then $3::bool else c.in_active end
 			order by c.id
 			limit $4 offset $2
 	) list,
@@ -41,6 +41,7 @@ with counts as (
 					'number', row_number() OVER (order by c.id),
 					'id', c.id,
 					'ru_name', c.ru_name,
+					'uz_name', c.uz_name,
 					'in_active', c.in_active,
 					'created_at', to_char(c.created_at, 'hh24:mi / dd.mm.yy')
 				)

@@ -1,10 +1,10 @@
-const { newLine } = require("../support/types");
+const { newLine, isNumber } = require("../support/types");
 const minLength = 3;
 const maxLength = 128;
 const barcodeMaxLength = 24;
 const imageMaxlength = 256;
 const descriptionMaxLength = 512;
-
+const { makeid } = require("../support/files");
 module.exports.getAllMid = async (req, res, next) => {
 	try {
 		const { search, page, companyId, categoryId, active, limit } =
@@ -49,7 +49,6 @@ module.exports.createMid = async (req, res, next) => {
 			companyId,
 			categoryId,
 			barcode,
-			image,
 			countInBlock,
 			description,
 			countPrice,
@@ -60,6 +59,10 @@ module.exports.createMid = async (req, res, next) => {
 			ruName,
 			enName,
 		} = req?.body;
+
+		const image = req?.files?.file;
+		const format = image?.mimetype?.split("/")[1];
+		const imageName = `${Date.now()}${makeid(5)}.${format}`;
 		if (
 			!uzName ||
 			!ruName ||
@@ -111,13 +114,18 @@ module.exports.createMid = async (req, res, next) => {
 				companyId,
 				categoryId,
 				barcode: barcode?.trim(),
-				image: image.trim(),
+				imageName: imageName.trim(),
 				blockCount,
 				countInBlock,
 				description: description?.trim(),
 				countPrice,
 				blockPrice: blockPrice,
-				discountPrice: discountPrice,
+				discountPrice:
+					discountPrice &&
+					isNumber(Number(discountPrice)) &&
+					Number(discountPrice) > 0
+						? discountPrice
+						: null,
 			};
 			return await next();
 		}

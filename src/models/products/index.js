@@ -35,6 +35,21 @@ module.exports.create = async (
 	ruName,
 	enName
 ) => {
+	console.log(
+		companyId,
+		categoryId,
+		barcode,
+		image,
+		countInBlock,
+		description,
+		countPrice,
+		blockCount,
+		blockPrice,
+		discountPrice,
+		uzName,
+		ruName,
+		enName
+	);
 	return await fetchOne(
 		CREATE,
 		companyId,

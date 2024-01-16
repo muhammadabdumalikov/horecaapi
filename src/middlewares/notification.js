@@ -1,6 +1,6 @@
 const { newLine, isNumber } = require("../support/types");
 const { makeid } = require("../support/files");
-const maxSize = 1024 * 1024 * 3; // max size 3 MB
+const maxSize = 1024 * 1024 * 2; // max size 3 MB
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {

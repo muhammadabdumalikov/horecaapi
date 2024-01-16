@@ -2,6 +2,8 @@ const NotificationModel = require("../models/notification");
 const pathFile = "notification";
 const fs = require("fs");
 
+
+
 module.exports.all = async (req, res) => {
 	try {
 		const { search, page, active, limit } = req?.body;
@@ -41,6 +43,7 @@ module.exports.add = async (req, res) => {
 		const imageSrc = `${pathFile}/${imageName}`;
 		const data = await NotificationModel.create(topic, content, imageSrc);
 		const image = req?.files?.file;
+		
 		if (!data) {
 			res.status(401).json({
 				error: true,

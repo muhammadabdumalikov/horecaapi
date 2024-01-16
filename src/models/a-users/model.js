@@ -26,6 +26,7 @@ with counts as (
 					'created_at', to_char(c.created_at, 'hh24:mi / dd.mm.yy'),
 					'updated_at', to_char(c.updated_at, 'hh24:mi / dd.mm.yy')
 				)
+        from users c        
 		where concat(c.organization, c.legal_name, contact) ilike
 			case
 				when $1::text <> '%""%' then $1
