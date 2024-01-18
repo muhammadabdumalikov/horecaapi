@@ -1,8 +1,5 @@
 const { newLine } = require("../support/types");
-const maxLength = 3,
-	contactLenth = 13,
-	maxLengthPass = 5,
-	languages = ["uz", "ru", "en"];
+const contactLenth = 13;
 
 module.exports.signupMid = async (req, res, next) => {
 	try {
@@ -66,6 +63,13 @@ module.exports.signinMid = async (req, res, next) => {
 				error: true,
 				uzMessage: "Qatorlar to'ldirilganini tekshiring",
 				ruMessage: "Проверьте, заполнены ли строки",
+			});
+			return;
+		} else if (String(contact).length !== contactLenth) {
+			res.status(449).json({
+				error: true,
+				uzMessage: "Telefon raqam standart ko'rinishda emas",
+				ruMessage: "Номер телефона не отображается по умолчанию.",
 			});
 			return;
 		} else {
