@@ -2,7 +2,7 @@ const { newLine, isNumber } = require("../support/types");
 
 module.exports.getAllMid = async (req, res, next) => {
 	try {
-		const { pageIndex, search, pageSize, active } = req?.query;
+		const { pageIndex, search, active, pageSize } = req?.query;
 		const l = pageSize && isNumber(Number(pageSize)) ? pageSize : 40;
 		const offset = pageIndex ? (pageIndex - 1) * Number(l) : 0;
 

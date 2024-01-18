@@ -2,8 +2,6 @@ const NotificationModel = require("../models/notification");
 const pathFile = "notification";
 const fs = require("fs");
 
-
-
 module.exports.all = async (req, res) => {
 	try {
 		const { search, page, active, limit } = req?.body;
@@ -43,7 +41,7 @@ module.exports.add = async (req, res) => {
 		const imageSrc = `${pathFile}/${imageName}`;
 		const data = await NotificationModel.create(topic, content, imageSrc);
 		const image = req?.files?.file;
-		
+
 		if (!data) {
 			res.status(401).json({
 				error: true,
@@ -79,7 +77,8 @@ module.exports.add = async (req, res) => {
 module.exports.upd = async (req, res) => {
 	try {
 		const { topic, content, imageName, id } = req?.body;
-		const imageSrc = `${pathFile}/${imageName}`;
+		const imageSrc = imageName ? `${pathFile}/${imageName}` : "false";
+
 		const data = await NotificationModel.update(
 			topic,
 			content,
@@ -101,12 +100,14 @@ module.exports.upd = async (req, res) => {
 			});
 			return;
 		} else {
-			image.mv(`views/${imageSrc}`, async (err, succ) => {
-				if (err) throw err;
-			});
-			fs.unlink(`views/${data?.oldImage}`, (err) => {
-				if (err) throw err;
-			});
+			image &&
+				image.mv(`views/${imageSrc}`, async (err, succ) => {
+					if (err) throw err;
+				});
+			image &&
+				fs.unlink(`views/${data?.oldImage}`, (err) => {
+					if (err) throw err;
+				});
 			res.status(201).json({
 				error: false,
 				data,

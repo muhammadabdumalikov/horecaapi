@@ -57,6 +57,12 @@ insert into notifications (topic, content, image)
 values($1, $2, $3) returning id
 `;
 
+// update users set ntfs = ntfs || '[13]'::jsonb
+
+// UPDATE users SET ntfs = ntfs #- '{13}' WHERE id = 25
+
+// select * from users;
+
 module.exports.UPDATE = `
 with a as (
 	select image old_image from  notifications where id = $4 
@@ -65,11 +71,20 @@ with a as (
 	set
 		topic = $1,
 		content = $2,
-		image = $3,
+		image = case
+					when $3 = 'false' then image
+					else $3
+				end,
 		updated_at = now()
 	where id = $4
 	returning id
-) select a.old_image as "oldImage", updated.id from a, updated
+) select 
+	case
+		when $3 = 'false' then '/'
+		else a.old_image  
+	end as "oldImage",
+	updated.id
+	from a, updated
 `;
 
 module.exports.INACTIVE = `

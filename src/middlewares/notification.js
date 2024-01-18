@@ -89,9 +89,10 @@ module.exports.updateMid = async (req, res, next) => {
 	try {
 		const { topic, content, id } = req?.body;
 		const image = req?.files?.file;
-		const format = image?.mimetype?.split("/")[1];
-		const imageName = `${Date.now()}${makeid(5)}.${format}`;
-		if (!topic || !content || !image || !id) {
+		const format = image && image?.mimetype?.split("/")[1];
+		const imageName = image && `${Date.now()}${makeid(5)}.${format}`;
+
+		if (!topic || !content || !id) {
 			res.status(449).json({
 				error: true,
 				message: "Qatorlar to'ldirilganini tekshiring",
@@ -103,7 +104,7 @@ module.exports.updateMid = async (req, res, next) => {
 				message: "Yangi qatorlar bilan kiritish cheklangan",
 			});
 			return;
-		} else if (image?.size > maxSize) {
+		} else if (image && image?.size > maxSize) {
 			res.status(449).json({
 				error: true,
 				message: `Rasm uchun cheklangan hajm ${maxSize}MB`,
@@ -113,7 +114,7 @@ module.exports.updateMid = async (req, res, next) => {
 			req.body = {
 				topic: topic.trim(),
 				content: content.trim(),
-				imageName: imageName.trim(),
+				imageName: image && imageName.trim(),
 				id,
 			};
 			return await next();
